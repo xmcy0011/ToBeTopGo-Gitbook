@@ -1,4 +1,4 @@
-module singalclose
+module goexample
 
 go 1.18
 
