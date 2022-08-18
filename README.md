@@ -10,5 +10,5 @@ become a top software developer, try your best to improve like c++/java/go/linux
 
 - Markdown Preview Enhanced
 - Markdown PDF
-- markdownlint
+- markdownlint（配置"no-hard-tabs": true）
 - PicGo：图床，使用阿里云oss [PicGo设置](https://zhuanlan.zhihu.com/p/448897997)、[Oss设置](https://blog.csdn.net/qq_35621494/article/details/106431899)
