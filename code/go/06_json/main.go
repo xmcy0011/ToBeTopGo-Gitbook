@@ -7,13 +7,41 @@ import (
 	"github.com/tidwall/gjson"
 )
 
+// 嵌套一个对象
+type Info struct {
+	age int `json:"age"`
+}
+
+// 嵌套一个对象数组
+type Extra struct {
+	Address string `json:"address"`
+}
+
+// 定义需要反序列化的结构体
 type UserRequest struct {
-	UserName string `json:"userName"`
-	NickName string `json:"nick_name"`
+	Name     string  `json:"userName"`  // 通过tag里面的json，来指定json字符串中该字段的值从那里解析，不需要和字段名一样
+	NickName string  `json:"nick_name"` // 如果没对应上，解析不了
+	info     Info    `json:"info"`      // 小写私有的，故反序列化失效，该字段永远为空
+	Extra    []Extra `json:"extra"`
 }
 
 func main() {
-	jsonStr := `{"userName": "admin", "nick_name": "管理员", "info":{ "age":18 }}`
+	jsonStr := `
+	{
+		"userName":"admin",
+		"nick_name":"管理员",
+		"info":{
+		   "age":18
+		},
+		"extra":[
+		   {
+			  "address":"上海市"
+		   },
+		   {
+			  "address":"北京市"
+		   }
+		]
+	 }`
 
 	// 方式一：序列化成map（不常用）
 	anyMap := make(map[string]interface{}, 0)
@@ -33,5 +61,8 @@ func main() {
 	userName := gjson.Get(jsonStr, "userName")
 	nickName := gjson.Get(jsonStr, "nick_name")
 	age := gjson.Get(jsonStr, "info.age").Int()
-	log.Println("get raw value by key:", userName, nickName, age)
+
+	// 取得extra数组0位置的对象
+	address1 := gjson.Get(jsonStr, "extra").Array()[1]
+	log.Println("get raw value by key:", userName, nickName, age, address1.Get("address"))
 }
